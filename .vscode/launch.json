@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-YesRiseApplication<yes-rise>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.csmacf.YesRiseApplication",
+            "projectName": "yes-rise",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

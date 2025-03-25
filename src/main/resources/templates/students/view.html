@@ -35,51 +35,48 @@
                     </thead>
                     <tbody>
                         <!-- Morning row -->
-                        <tr
-                            th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null},
-                                     onlyAM=${student.amCourse != null && student.pmCourse == null && student.allDayCourse == null},
-                                     onlyPM=${student.amCourse == null && student.pmCourse != null && student.allDayCourse == null}">
-                            <td>Morning</td>
-                            <td th:classappend="${noCourses ? 'table-danger' : (onlyAM or onlyPM ? 'table-warning' : '')}"
-                                th:text="${student.amCourse != null ? student.amCourse.name : 'Not Enrolled'}"></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="showCourseSelection('AM')"
-                                    th:disabled="${student.allDayCourse != null}">
-                                    Change Course
-                                </button>
-                            </td>
-                        </tr>
+<tr th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null},
+onlyAM=${student.amCourse != null && student.pmCourse == null && student.allDayCourse == null},
+onlyPM=${student.amCourse == null && student.pmCourse != null && student.allDayCourse == null}">
+<td>Morning</td>
+<td th:classappend="${noCourses ? 'table-danger' : (onlyAM or onlyPM ? 'table-warning' : '')}"
+th:text="${student.amCourse != null ? student.amCourse.name : 'Not Enrolled'}"></td>
+<td>
+<button class="btn btn-primary btn-sm" onclick="showCourseSelection('AM')"
+th:disabled="${student.allDayCourse != null}">
+Change Course
+</button>
+</td>
+</tr>
 
-                        <!-- Afternoon row -->
-                        <tr
-                            th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null},
-                                     onlyAM=${student.amCourse != null && student.pmCourse == null && student.allDayCourse == null},
-                                     onlyPM=${student.amCourse == null && student.pmCourse != null && student.allDayCourse == null}">
-                            <td>Afternoon</td>
-                            <td th:classappend="${noCourses ? 'table-danger' : (onlyAM or onlyPM ? 'table-warning' : '')}"
-                                th:text="${student.pmCourse != null ? student.pmCourse.name : 'Not Enrolled'}"></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="showCourseSelection('PM')"
-                                    th:disabled="${student.allDayCourse != null}">
-                                    Change Course
-                                </button>
-                            </td>
-                        </tr>
+<!-- Afternoon row -->
+<tr th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null},
+onlyAM=${student.amCourse != null && student.pmCourse == null && student.allDayCourse == null},
+onlyPM=${student.amCourse == null && student.pmCourse != null && student.allDayCourse == null}">
+<td>Afternoon</td>
+<td th:classappend="${noCourses ? 'table-danger' : (onlyAM or onlyPM ? 'table-warning' : '')}"
+th:text="${student.pmCourse != null ? student.pmCourse.name : 'Not Enrolled'}"></td>
+<td>
+<button class="btn btn-primary btn-sm" onclick="showCourseSelection('PM')"
+th:disabled="${student.allDayCourse != null}">
+Change Course
+</button>
+</td>
+</tr>
 
-                        <!-- All Day row -->
-                        <tr
-                            th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null}">
-                            <td>All Day</td>
-                            <td th:classappend="${noCourses ? 'table-danger' : ''}"
-                                th:text="${student.allDayCourse != null ? student.allDayCourse.name : 'Not Enrolled'}">
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="showCourseSelection('ALL_DAY')"
-                                    th:disabled="${student.amCourse != null || student.pmCourse != null}">
-                                    Change Course
-                                </button>
-                            </td>
-                        </tr>
+<!-- All Day row -->
+<tr th:with="noCourses=${student.amCourse == null && student.pmCourse == null && student.allDayCourse == null}">
+<td>All Day</td>
+<td th:classappend="${noCourses ? 'table-danger' : ''}"
+th:text="${student.allDayCourse != null ? student.allDayCourse.name : 'Not Enrolled'}">
+</td>
+<td>
+<button class="btn btn-primary btn-sm" onclick="showCourseSelection('ALL_DAY')"
+th:disabled="${student.amCourse != null || student.pmCourse != null}">
+Change Course
+</button>
+</td>
+</tr>
                     </tbody>
                 </table>
             </div>
@@ -113,43 +110,50 @@
         });
 
         async function showCourseSelection(sessionType) {
-            const response = await fetch(`/api/courses/available/${sessionType}`);
-            const courses = await response.json();
+    try {
+        const response = await fetch(`/api/courses/available/${sessionType}`);
+        const courses = await response.json();
+        
+        console.log('Received courses:', courses); // Add this line to log the received JSON data
 
-            const courseList = document.getElementById('courseList');
-            courseList.innerHTML = '';
+        const courseList = document.getElementById('courseList');
+        courseList.innerHTML = '';
 
-            // Add option to remove from course
-            const removeItem = document.createElement('a');
-            removeItem.href = '#';
-            removeItem.className = 'list-group-item list-group-item-action';
-            removeItem.textContent = 'Remove from course';
-            removeItem.onclick = () => enrollStudent(null, sessionType);
-            courseList.appendChild(removeItem);
+        // Add option to remove from course
+        const removeItem = document.createElement('a');
+        removeItem.href = '#';
+        removeItem.className = 'list-group-item list-group-item-action';
+        removeItem.textContent = 'Remove from course';
+        removeItem.onclick = () => enrollStudent(null, sessionType);
+        courseList.appendChild(removeItem);
 
-            // Add available courses
-            courses.forEach(course => {
-                const item = document.createElement('a');
-                item.href = '#';
-                item.className = 'list-group-item list-group-item-action';
-                item.textContent = `${course.name} (${course.currentEnrollment}/${course.capacity})`;
-                if (course.description) {
-                    item.setAttribute('data-bs-toggle', 'tooltip');
-                    item.setAttribute('data-bs-placement', 'right');
-                    item.setAttribute('title', course.description);
-                }
-                item.onclick = () => enrollStudent(course.id, sessionType);
-                courseList.appendChild(item);
-            });
+        // Add available courses
+        courses.forEach(course => {
+            const item = document.createElement('a');
+            item.href = '#';
+            item.className = 'list-group-item list-group-item-action';
+            item.textContent = `${course.name} (${course.currentEnrollment}/${course.capacity})`;
+            if (course.description) {
+                item.setAttribute('data-bs-toggle', 'tooltip');
+                item.setAttribute('data-bs-placement', 'right');
+                item.setAttribute('title', course.description);
+            }
+            item.onclick = () => enrollStudent(course.id, sessionType);
+            courseList.appendChild(item);
+        });
 
-            // Initialize tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
 
-            modal.show();
-        }
+        modal.show();
+    } catch (error) {
+        console.error('Error fetching courses:', error); // Add this line to log any errors
+        alert('Error fetching courses: ' + error);
+    }
+}
 
         async function enrollStudent(courseId, sessionType) {
             try {

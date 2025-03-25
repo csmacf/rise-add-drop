@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Created-By: Maven JAR Plugin 3.4.2
+Build-Jdk-Spec: 21
+Implementation-Title: yes-rise
+Implementation-Version: 0.0.3-SNAPSHOT
+Main-Class: org.springframework.boot.loader.launch.JarLauncher
+Start-Class: dev.csmacf.YesRiseApplication
+Spring-Boot-Version: 3.3.2
+Spring-Boot-Classes: BOOT-INF/classes/
+Spring-Boot-Lib: BOOT-INF/lib/
+Spring-Boot-Classpath-Index: BOOT-INF/classpath.idx
+Spring-Boot-Layers-Index: BOOT-INF/layers.idx
+
+
+
+/Users/charlesmacfadyen/Desktop/rise25-449023-a561fd16925a.json

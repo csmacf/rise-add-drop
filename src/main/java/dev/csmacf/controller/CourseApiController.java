@@ -23,11 +23,12 @@ public class CourseApiController {
     }
 
     @GetMapping("/available/{sessionType}")
-    public List<Course> getAvailableCourses(@PathVariable String sessionType) {
+    public List<CourseDTO> getAvailableCourses(@PathVariable String sessionType) {
         ScheduleType scheduleType = ScheduleType.valueOf(sessionType.toUpperCase());
         List<Course> courses = courseService.getCoursesByScheduleType(scheduleType);
         return courses.stream()
                 .filter(course -> course.getCurrentEnrollment() < course.getCapacity())
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
