@@ -14,7 +14,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByAmCourse(Course course);
     List<Student> findByPmCourse(Course course);
     List<Student> findByAllDayCourse(Course course);
-    
+    List<Student> findByEmailStartingWithIgnoreCase(String email);
     Optional<Student> findBySchoolId(Integer studentId);
     
     Optional<Student> findByEmail(String email);

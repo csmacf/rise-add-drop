@@ -41,6 +41,9 @@ public class StudentService {
    return this.studentRepository.findAll();
  }
 
+ public List<Student> findStudentsByEmailStartingWith(String email) {
+  return studentRepository.findByEmailStartingWithIgnoreCase(email);
+}
  public StudentScheduleDTO enrollStudent(Long studentId, Long courseId) {
    Student student = (Student)this.studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student not found"));
    Course newCourse = (Course)this.courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException("Course not found"));

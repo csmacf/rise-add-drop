@@ -48,7 +48,12 @@ public class StudentController {
             return "redirect:/students";
         }
     }
-
+    @GetMapping("/search")
+    public String searchStudentsByEmail(@RequestParam("email") String email, Model model) {
+        List<Student> students = studentService.findStudentsByEmailStartingWith(email);
+        model.addAttribute("students", students);
+        return "students/list";
+    }
     @PostMapping("/upload")
     public String uploadStudentsCsv(@RequestParam("file") MultipartFile file, 
                                    RedirectAttributes redirectAttributes) {

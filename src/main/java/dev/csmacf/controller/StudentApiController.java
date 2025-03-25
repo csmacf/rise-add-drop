@@ -2,6 +2,7 @@ package dev.csmacf.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import dev.csmacf.dto.CourseDTO;
 import dev.csmacf.dto.StudentScheduleDTO;
 import dev.csmacf.dto.StudentTransferDTO;
+import dev.csmacf.model.Student;
 import dev.csmacf.service.StudentService;
 import dev.csmacf.utilities.EnrollmentRequest;
 
@@ -27,7 +29,15 @@ public class StudentApiController {
     private final StudentService studentService;
 
     public StudentApiController(StudentService studentService) {
-        this.studentService = studentService;
+        this.
+        studentService = studentService;
+    }
+ @GetMapping("/email-suggestions")
+    public List<String> getEmailSuggestions(@RequestParam("email") String email) {
+        List<Student> students = studentService.findStudentsByEmailStartingWith(email);
+        return students.stream()
+                .map(Student::getEmail)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/enroll")
